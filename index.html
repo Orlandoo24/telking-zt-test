@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./echarts.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<style>
+  @font-face {
+    font-family: 'icomoon';
+    src: url('fonts/icomoon.eot?rvn7lh');
+    src: url('onts/icomoon.eot?rvn7lh#iefix') format('embedded-opentype'),
+      url('fonts/icomoon.ttf?rvn7lh') format('truetype'),
+      url('fonts/icomoon.woff?rvn7lh') format('woff'),
+      url('fonts/icomoon.svg?rvn7lh#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+  }
+
+  * {
+    padding: 0;
+    margin: 0 auto;
+  }
+
+  body {
+    background-color: #f1f1f1;
+  }
+
+  .nav {
+    width: 1440px;
+    height: 100px;
+    background-color: #fefefe;
+    margin: 0 auto;
+  }
+
+  .nav-left {
+    width: 105px;
+    height: 30px;
+    float: left;
+    margin-top: 30px;
+    margin-left: 150px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
+
+
+  .nav-right {
+    display: block;
+    float: right;
+    margin-top: 30px;
+    margin-right: 150px;
+  }
+
+  .nav-right li {
+    float: left;
+    font-family: 'icomoon';
+    margin-right: 10px;
+  }
+
+  ul li {
+    list-style: none;
+  }
+
+  .w {
+    width: 1200px;
+  }
+
+  .topic-1 h1 {
+    font-size: 30px;
+    font-weight: 400;
+  }
+
+  .topic-1 h4 {
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  .topic {
+    height: 200px;
+    margin: 0 auto;
+  }
+
+  .topic-1 {
+    padding-top: 70px;
+  }
+
+  .topic-2 {
+    float: right;
+    margin-top: -20px;
+  }
+
+  .topic-2 ul li {
+    float: left;
+    margin-left: 10px;
+  }
+
+  .topic-2 ul li a {
+    font-size: 13px;
+    color: black;
+    text-decoration: none;
+    font-weight: 400;
+  }
+
+  .topic-2 ul li a:hover {
+    border-bottom: 2px solid gray;
+  }
+
+  .content {
+    height: 300px;
+  }
+
+  .conten-left {
+    position: relative;
+    height: 300px;
+    width: 580px;
+    float: left;
+  }
+
+  .content-right {
+    height: 300px;
+    width: 580px;
+    background-color: #fefefe;
+    float: right;
+  }
+
+  .prev {
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    left: 0;
+    top: 120px;
+    padding: 5px;
+    text-align: center;
+    color: #f1f1f1;
+    background-color: rgba(0, 0, 0, 0.1);
+    font-size: 20px;
+  }
+
+  .next {
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    right: 0;
+    top: 120px;
+    padding: 5px;
+    text-align: center;
+    color: #f1f1f1;
+    background-color: rgba(0, 0, 0, 0.1);
+    font-size: 20px;
+  }
+
+  .conten-left ul {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    margin-left: -30px;
+  }
+
+  .conten-left ul li {
+    float: left;
+    width: 10px;
+    height: 10px;
+    background: #f1f1f1;
+    margin-left: 5px;
+  }
+
+  .conten-header {
+    height: 120px;
+    border-bottom: 2px solid #f1f1f1;
+  }
+
+  .conten-header h3 {
+    float: left;
+    margin-top: 50px;
+    margin-left: 50px;
+    font-weight: 400;
+  }
+
+  .conten-header button {
+    float: right;
+    width: 95px;
+    height: 40px;
+    border-radius: 2px;
+    color: #262b2e;
+    border: solid 1px #262b2e;
+    margin-top: 45px;
+    margin-right: 50px;
+    background-color: #f1f1f1;
+  }
+
+  .content-footer {
+    height: 230px;
+
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    content: "";
+    display: table;
+  }
+
+  .clearfix:after {
+    clear: both;
+  }
+
+  .clearfix {
+    zoom: 1;
+  }
+
+  .myform-topic {
+    margin-top: 40PX;
+  }
+
+  .myform-content {
+    margin-top: 25PX;
+  }
+
+  .myform-topic li {
+    float: left;
+    margin-left: 50PX;
+  }
+
+  .myform-topic li:nth-child(2) {
+    margin-left: 70px;
+  }
+
+  .myform-topic li:last-child {
+    margin-left: 200px;
+  }
+
+  .myform-content li {
+    float: left;
+    margin-left: 50PX;
+  }
+
+  .myform-content li:last-child {
+    margin-left: 160px;
+  }
+
+  .myform-content button {
+    width: 65px;
+    height: 30px;
+    background-color: #5dd054;
+    border: 0;
+    color: #fefefe;
+  }
+
+  .bigbox {
+    height: 350px;
+    margin-top: 20px;
+    background: #fefefe;
+  }
+
+  .bigbox h1 {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .curve {
+    height: 350px;
+  }
+
+  .bigbox2 {
+    margin-top: 20px;
+  }
+
+  .pieChart {
+    width: 560px;
+    height: 380px;
+    background-color: #fefefe;
+    float: left;
+  }
+
+  .Histogram {
+    width: 560px;
+    height: 380px;
+    background-color: #fefefe;
+    float: right;
+  }
+
+  .footer {
+    position: relative;
+    width: 1440px;
+    height: 253px;
+    margin-top: 53px;
+    background-color: #202124;
+  }
+
+  .footer-logo {
+    position: absolute;
+    width: 105px;
+    height: 32px;
+    left: 182px;
+    top: 90px;
+  }
+
+  .footer-info {
+    color: #f1f1f1;
+    margin-left: 316px;
+    padding-top: 80px;
+  }
+
+  .footer-info ul {
+    float: left;
+    margin-left: 120px;
+    font-size: 13px;
+  }
+
+  .footer-info ul li {
+    margin-top: 10px;
+  }
+</style>
+
+<body>
+  <!-- nav start -->
+  <div class="nav">
+    <div class="nav-left">
+      <img src="./logo.png" alt="">
+    </div>
+    <ul class="nav-right">
+      <li>1</li>
+      <li>2</li>
+      <li>Log Out</li>
+    </ul>
+  </div>
+  <!-- nav end -->
+
+  <!-- topic start -->
+  <div class="topic w">
+    <div class="topic-1">
+      <h1>Audience Overview</h1>
+      <h4>Roseville, CA</h4>
+    </div>
+    <div class="topic-2">
+      <ul>
+        <li><a href="#">DASHBOARD </a></li>
+        <li><a href="#">PROJECTS</a></li>
+        <li><a href="#">CALENDAR</a></li>
+        <li><a href="#">MAILBOX</a></li>
+        <li><a href="#">SETTINGS</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- topic end -->
+
+  <!-- content start -->
+  <div class="content w">
+    <div class="conten-left">
+      <img src="./images/1.png" alt="">
+      <div class="prev">&lt;</div>
+      <div class="next">&gt;</div>
+      <ul>
+        <li class="active"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+    <div class="content-right">
+      <div class="conten-header">
+        <h3>Support Requests</h3>
+        <button>View All</button>
+      </div>
+      <div class="content-footer">
+        <ul class="myform">
+          <li>
+            <ul class="myform-topic clearfix">
+              <li>TIME</li>
+              <li>USER NAME</li>
+              <li>STATUS</li>
+            </ul>
+          </li>
+          <li>
+            <ul class="myform-content clearfix">
+              <li>9:45pm</li>
+              <li>info@design.com</li>
+              <li><BUtton>Solved</BUtton></li>
+            </ul>
+          </li>
+          <li>
+            <ul class="myform-content clearfix">
+              <li>9:45pm</li>
+              <li>info@design.com</li>
+              <li><BUtton>Solved</BUtton></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- content end -->
+
+  <div class="bigbox  w clearfix">
+    <h1>曲线图数据展示</h1>
+    <div class="curve w">
+
+    </div>
+  </div>
+
+  <div class="bigbox2 w clearfix">
+    <div class="pieChart"></div>
+    <div class="Histogram"></div>
+  </div>
+
+
+  <div class="footer">
+    <div class="footer-logo">
+      <img src="./logo.png" alt="">
+    </div>
+    <div class="footer-info clearfix">
+      <ul>
+        <li>NEWS</li>
+        <li>CHANNELS</li>
+        <li>OVERVIEW</li>
+        <li>TIMELINE</li>
+      </ul>
+
+      <ul>
+        <li>NEWS</li>
+        <li>CHANNELS</li>
+        <li>OVERVIEW</li>
+        <li>TIMELINE</li>
+      </ul>
+
+      <ul>
+        <li>NEWS</li>
+        <li>CHANNELS</li>
+        <li>OVERVIEW</li>
+        <li>TIMELINE</li>
+      </ul>
+
+      <ul>
+        <li>NEWS</li>
+        <li>CHANNELS</li>
+        <li>OVERVIEW</li>
+        <li>TIMELINE</li>
+      </ul>
+
+      <ul>
+        <li>NEWS</li>
+        <li>CHANNELS</li>
+        <li>OVERVIEW</li>
+        <li>TIMELINE</li>
+      </ul>
+    </div>
+  </div>
+</body>
+<script>
+  const images = ['./images/1.png', './images/2.png', './images/3.png', './images/4.png', './images/5.png']
+  const img = document.querySelector('.conten-left img')
+  const next = document.querySelector('.next')
+  const prev = document.querySelector('.prev')
+  let i = 1
+
+  const nextImg = function () {
+    // alert(1)
+    i++
+    if (i >= 5) {
+      i = 0
+    }
+    img.src = images[i]
+  }
+
+  next.addEventListener('click', nextImg)
+
+  prev.addEventListener('click', function () {
+    i--
+    if (i <= 0) {
+      i = 4
+    }
+    img.src = images[i]
+  })
+
+  let timer
+  // 轮播图自动播放
+  timer = setInterval(function () {
+    nextImg()
+  }, 1000)
+
+  //鼠标放上去停止自动播放
+  const content = document.querySelector('.conten-left')
+  content.addEventListener('mouseenter', function () {
+    clearInterval(timer)
+  })
+
+  content.addEventListener('mouseleave', function () {
+    timer = setInterval(function () {
+      nextImg()
+    }, 1000)
+  })
+
+
+
+  const initChart = function () {
+    //曲线图
+
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.querySelector('.curve'));
+
+    var pieChart = echarts.init(document.querySelector('.pieChart'));
+
+    var histogram = echarts.init(document.querySelector('.Histogram'));
+
+    // 指定图表的配置项和数据
+    var option = {
+      xAxis: {
+        data: xAxis
+      },
+      yAxis: {},
+      series: [
+        {
+          data: series,
+          type: 'line',
+          smooth: true
+        }
+      ]
+    };
+
+    option2 = {
+      // color: ['#f12345', '#f23456', '#f45677'],
+      series: [
+        {
+          type: 'pie',
+          data: [
+            {
+              value: 335,
+              name: '直接访问',
+
+            },
+            {
+              value: 234,
+              name: '联盟广告'
+            },
+            {
+              value: 1548,
+              name: '搜索引擎'
+            }
+          ]
+        }
+      ]
+    };
+
+    option3 = {
+      xAxis: {
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      },
+      yAxis: {},
+      series: [
+        {
+          type: 'bar',
+          data: [23, 24, 18, 25, 27, 28, 25]
+        }
+      ]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option)
+    pieChart.setOption(option2)
+    histogram.setOption(option3)
+  }
+
+
+  // 请求echarts数据
+  const myaxios = axios.create({
+    baseURL: 'https://edu.telking.com/api/',
+    timeout: 1000,
+  });
+
+  let xAxis
+  let series
+  // 向给定ID的用户发起请求
+  async function getData() {
+    try {
+      const response = await myaxios.get('?type=month')
+      xAxis = response.data.data.xAxis
+      series = response.data.data.series
+      initChart()
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  getData()
+
+
+  // myaxios.get('?type=month')
+  //   .then(function (response) {
+  //     // 处理成功情况
+  //     console.log(response);
+  //     xAxis = response.data.data.xAxis
+  //     series = response.data.data.series
+  //   })
+  //   .catch(function (error) {
+  //     // 处理错误情况
+  //     console.log(error);
+  //   })
+  //   .then(function () {
+  //     // 总是会执行
+  //   });
+
+
+
+
+
+
+</script>
+
+</html>
